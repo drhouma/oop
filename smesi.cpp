@@ -30,7 +30,7 @@ std::function<double(double)> mixture_density(distribution f1, distribution f2,
 }
 // вычисляет матожидание смеси распределений
 // пока вместо мат ожидания соответствующих распределений будет их сдвиг
-double mixture_mathematical_expectation(fraction f1, fraction f2, double p) {
+double mixture_mathematical_expectation(distribution f1, distribution f2, double p) {
   double me_1 = cosine_power_mathematical_expectation(f1.v, f1.mu, f1.lambda);
   double me_2 = cosine_power_mathematical_expectation(f2.v, f2.mu, f2.lambda);
   return (1 - p) * me_1 + p * me_2;
