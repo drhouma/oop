@@ -3,7 +3,7 @@
 
 #include "statistics.h"
 
-struct fraction {
+struct distribution {
   double v;
   double mu;
   double lambda;
@@ -16,7 +16,7 @@ struct fraction {
 
 // 0 <= p <= 1
 
-std::function<double(double)> mixture_density(fraction f1, fraction f2,
+std::function<double(double)> mixture_density(distribution f1, distribution f2,
                                               double p) {
   if (abs(p) > 1)
     throw std::runtime_error("invalid fraction parameter p (0 <= p <= 1)");
@@ -38,7 +38,7 @@ double mixture_mathematical_expectation(fraction f1, fraction f2, double p) {
 }
 
 // вычисляет дисперсию смеси распределений 0 <= p <= 1
-double mixture_variance(fraction f1, fraction f2, double p) {
+double mixture_variance(distribution f1, distribution f2, double p) {
   if (abs(p) > 1)
     throw std::runtime_error("invalid fraction parameter p (0 <= p <= 1)");
   double variance_1 =
@@ -53,7 +53,7 @@ double mixture_variance(fraction f1, fraction f2, double p) {
          me_mixture * me_mixture;
 }
 
-double mixture_mathematical_excess(fraction f1, fraction f2, double p) {
+double mixture_mathematical_excess(distribution f1, distribution f2, double p) {
   if (abs(p) > 1)
     throw std::runtime_error("invalid fraction parameter p (0 <= p <= 1)");
 
@@ -74,7 +74,7 @@ double mixture_mathematical_excess(fraction f1, fraction f2, double p) {
 }
 
 
-double mixture_mathematical_asymmetry(fraction f1, fraction f2, double p) {
+double mixture_mathematical_asymmetry(distribution f1, distribution f2, double p) {
   if (abs(p) > 1)
     throw std::runtime_error("invalid fraction parameter p (0 <= p <= 1)");
 
