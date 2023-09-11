@@ -1,5 +1,5 @@
-#include "statistics.h"
-#include "catch.h"
+#include "../statistics.h"
+#include "../catch.h"
 
 using namespace std;
 
