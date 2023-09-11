@@ -1,6 +1,7 @@
+#define CATCH_CONFIG_RUNNER
 #include<iostream>
 #include<fstream>
-
+#include "catch.h"
 #include "statistics.h"
 
 void generate_theoretical_data(double v) {
@@ -34,15 +35,16 @@ void generate_emperical_density(int n, double v) {
 	file.close();
 }
 
-int main() {
-	srand(time(0)); // random state for random
+int main(int argc, char* argv[]) {
+    srand(time(0)); // random state for random
 
-	double v = 1.5; // parameter v for distribution density
-	int n = 100000;
+    double v = 1.5; // parameter v for distribution density
+    int n = 1000;
 
-	generate_emperic_data(n, v);		// Generating emperic data
-	generate_theoretical_data(v);	// Generating theoretical data
-	generate_emperical_density(n, v);
+    generate_emperic_data(n, v);		// Generating emperic data
+    generate_theoretical_data(v);	// Generating theoretical data
+    generate_emperical_density(n, v);
 
-	return 0;
+    int result = Catch::Session().run(argc, argv);
+    return result;
 }

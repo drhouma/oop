@@ -84,7 +84,7 @@ std::map<std::pair<double, double>, double> get_emperic_density(
 }
 
 double emperical_moment(std::vector<double>& data, int p, bool central) {
-  if (size(data) == 0) {
+  if (data.size() == 0) {
     throw std::length_error("Vector size must be higher then 0");
   }
   double mean = (!central) ? 0 : emperical_moment(data, 1, false);
@@ -92,5 +92,5 @@ double emperical_moment(std::vector<double>& data, int p, bool central) {
   for (auto elem : data) {
     output += pow(elem - mean, p);
   }
-  return output / size(data);
+  return output / data.size();
 }
