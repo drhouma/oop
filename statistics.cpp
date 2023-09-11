@@ -28,11 +28,10 @@ double cosine_power_mathematical_expectation(double v, double mu,
 }
 
 double cosine_power_mathematical_variance(double v, double mu, double lambda) {
-  if (lambda == 0) {
-    throw std::invalid_argument("Parameter lambda can't be equal zero");
-  }
-  return 2.0 * polygamma((v + 2) / 2.0, 1) / pow(acos(-1.0), 2) * lambda *
-         lambda;
+    if (lambda == 0) {
+        throw std::invalid_argument("Parameter lambda can't be equal zero");
+    }
+    return 2.0 * polygamma((v + 2) / 2.0, 1) / pow(acos(-1.0), 2) * lambda * lambda;
 }
 
 double cosine_power_mathematical_asymmetry(double v, double mu, double lambda) {
