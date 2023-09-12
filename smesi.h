@@ -1,5 +1,8 @@
-#include <stdexcept>
+#pragma once
 
+#include <cmath>
+#include <stdexcept>
+#include "statistics.h"
 // плотность, дисперсия, к-ты эксцесса и ассиметрии
 struct distribution {
     double v;
