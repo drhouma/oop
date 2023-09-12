@@ -2,19 +2,7 @@
 #include <stdexcept>
 
 #include "statistics.h"
-
-struct distribution {
-  double v;
-  double mu;
-  double lambda;
-};
-
-// плотность, дисперсия, к-ты эксцесса и ассиметрии,
-
-
-
-
-// 0 <= p <= 1
+#include "smesi.h"
 
 std::function<double(double)> mixture_density(distribution f1, distribution f2,
                                               double p) {
@@ -28,8 +16,7 @@ std::function<double(double)> mixture_density(distribution f1, distribution f2,
     return (1 - p) * func1(x) + p * func2(x);
   };
 }
-// вычисляет матожидание смеси распределений
-// пока вместо мат ожидания соответствующих распределений будет их сдвиг
+
 double mixture_mathematical_expectation(distribution f1, distribution f2, double p) {
   double me_1 = cosine_power_mathematical_expectation(f1.v, f1.mu, f1.lambda);
   double me_2 = cosine_power_mathematical_expectation(f2.v, f2.mu, f2.lambda);
@@ -37,7 +24,7 @@ double mixture_mathematical_expectation(distribution f1, distribution f2, double
   //   return (1 - p) * f1.mu + p * f2.mu;
 }
 
-// вычисляет дисперсию смеси распределений 0 <= p <= 1
+
 double mixture_variance(distribution f1, distribution f2, double p) {
   if (abs(p) > 1)
     throw std::runtime_error("invalid fraction parameter p (0 <= p <= 1)");
