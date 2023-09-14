@@ -26,3 +26,4 @@ double mixture_mathematical_excess(distribution f1, distribution f2, double p);
 
 double mixture_mathematical_asymmetry(distribution f1, distribution f2, double p);
 
+double mixture_generate_value(distribution f1, distribution f2, double p);
