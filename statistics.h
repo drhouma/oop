@@ -67,3 +67,6 @@ std::map<std::pair<double, double>, double> get_emperical_density(std::vector<do
 
 // Generates random value from emperical distribution
 double generate_from_emperical_distribution(std::map<std::pair<double, double>, double> func);
+
+// Возвращает значение переданной эмпирической плотности в точке x
+double get_value_of_emperical_density(std::map<std::pair<double, double>, double>& func, double x);

@@ -8,8 +8,12 @@ double random() { return rand() / double(RAND_MAX); }
 
 std::function<double(double)> cosine_power_density(double v) {
     return [v](double x) {
-        return sqrt(acos(-1.0)) * tgamma(v / 2.0 + 1.0) *
-               pow(cos(acos(-1.0) * x / 2.0), v) / 2.0 / tgamma((v + 1.0) / 2.0);
+        if ((-1 <= x) && (x <= 1)) {
+            return sqrt(acos(-1.0)) * tgamma(v / 2.0 + 1.0) *
+                   pow(cos(acos(-1.0) * x / 2.0), v) / 2.0 / tgamma((v + 1.0) / 2.0);
+        } else {
+            return 0.0;
+        }
     };
 }
 
@@ -120,4 +124,12 @@ double generate_from_emperical_distribution(std::map<std::pair<double, double>, 
             return output;
         }
     }
+}
+
+double get_value_of_emperical_density(std::map<std::pair<double, double>, double>& func, double x) {
+    for (auto& segment : func) {
+        if ((segment.first.first <= x) && (x <= segment.first.second))
+            return segment.second;
+    }
+    return 0.0;
 }
