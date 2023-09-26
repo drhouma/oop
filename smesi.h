@@ -25,3 +25,7 @@ double mixture_mathematical_asymmetry(distribution f1, distribution f2, double p
 
 // генерирует случайную величину распределенную из смеси
 double mixture_generate_value(distribution f1, distribution f2, double p);
+
+// считает матожидание, дисперсию, коэффиценты ассиметрии и эксцесса для эмпирической и теоретической плотностей 
+// ( 0 <= p <= 1)
+void mixture_eval_theor_and_emperical_chars(int n, distribution f1, distribution f2, double p);
