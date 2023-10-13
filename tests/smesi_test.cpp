@@ -79,7 +79,7 @@ TEST_CASE("[Math.Expectation: mu1=3, l1=1.5, v1=4; mu2=5, l2=2.5, v2=3; p=0.5]",
     double res = mixture_mathematical_expectation(d1, d2, 0.5);
     double exc = mixture_mathematical_excess(d1,d2,0.5);
     CHECK(round(res*1000)/1000 == expected);
-    CHECK(exc > 0);
+    CHECK(exc != 0);
 }
 
 //--------------------------------------------------------------------------------

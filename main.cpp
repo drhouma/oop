@@ -160,6 +160,9 @@ int main(int argc, char* argv[]) {
     export_mixture_distribution_graph_data(1000, { 2, -3, 1.5 }, { 0.5, 2, 0.5 }, 0.3);
     export_emperical_from_emperical_graph_data(1000, { 4, 2, 2.2 });
 
+    mixture_eval_theor_and_emperical_chars(1000000, {2, 5, 0.3}, {4, 2, 2.2}, 0.4);
+
+
     int result = Catch::Session().run(argc, argv);
     return result;
     return 0;

@@ -53,12 +53,8 @@ double mixture_mathematical_asymmetry(distribution f1, distribution f2, double p
     double me_2 = cosine_power_mathematical_expectation(f2.v, f2.mu, f2.lambda);
     double me_mixture = mixture_mathematical_expectation(f1, f2, p);
     double mixture_var = mixture_variance(f1, f2, p);
-
-    return (1 / (pow(mixture_var, 3/2))) *
-           (
-                   (1 - p)* (pow(me_1 - me_mixture, 3) + 3 * (me_1 - me_mixture)* variance_1 + pow(variance_1, 3/2) * cosine_power_mathematical_asymmetry(f1.v, f1.mu, f1.lambda))
-                   +    p * (pow(me_2 - me_mixture, 3) + 3 * (me_2 - me_mixture)* variance_2 + pow(variance_2, 3/2) * cosine_power_mathematical_asymmetry(f2.v, f2.mu, f2.lambda))
-           );
+    return 1 / pow(mixture_var, 3.0/2) * ((1 - p)* (pow(me_1 - me_mixture, 3) + 3 * (me_1 - me_mixture)* variance_1 )+ p * (pow(me_2 - me_mixture, 3) + 3 * (me_2 - me_mixture)* variance_2));
+    return 1 / pow(mixture_var, 1.5) * ((1 - p) * (pow(me_1 - me_mixture, 3) + 3 * (me_1 - me_mixture)*variance_1) + p * (pow(me_2 - me_mixture, 3) + 3 * (me_2 - me_mixture)*variance_2));
 }
 
 // gamma 2
@@ -87,7 +83,7 @@ double mixture_mathematical_excess(distribution f1, distribution f2, double p) {
 }
 
 
-    
+
 
 double mixture_generate_value(distribution f1, distribution f2, double p) {
     if (p < 0 || p > 1) {
@@ -109,16 +105,15 @@ void mixture_eval_theor_and_emperical_chars(int n, distribution f1, distribution
     std::vector<double> data(n);
     for (int i = 0; i < n; ++i)
         data[i] = mixture_generate_value(f1, f2, p);
-    std::ofstream file1("C:/Users/degty/source/repos/Project1/data.txt");
-
+   std::ofstream file1("data/data.txt");
     // generate mathematical expectation (theorethical and emperical)
-    file1 << n << std::endl;
+   file1 << n << std::endl;
     double me_t = mixture_mathematical_expectation(f1, f2, p), me_e = emperical_mathematical_expectation(data);
     file1 << me_t << ' ' << me_e << std::endl;
 
     // generate variance (theorethical and emperical)
     double var_t = mixture_variance(f1, f2, p), var_e = emperical_variance(data);
-    file1 << var_t << ' ' << var_e << std::endl;
+    file1<< var_t << ' ' << var_e << std::endl;
 
     // generate asymmetry coef (theorethical and emperical)
     double as_t = mixture_mathematical_asymmetry(f1, f2, p), as_e = emperical_asymmetry(data);
@@ -128,5 +123,5 @@ void mixture_eval_theor_and_emperical_chars(int n, distribution f1, distribution
     double excess_t = mixture_mathematical_excess(f1, f2, p), excess_e = emperical_excess(data);
     file1 << excess_t << ' ' << excess_e << std::endl;
 
-    file1.close();
+    //file1.close();
 }
