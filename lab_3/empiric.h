@@ -19,7 +19,6 @@ class Empiric{
     Empiric(const Empiric& emp);
     Empiric& operator=(const Empiric & emp);
 
-    void GenerateData();
 
     // Returns math expectation of cosine-power distribution
     double Expectation();
