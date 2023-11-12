@@ -6,7 +6,7 @@ function<double(double)> MixtureDistribution::Density() {
     return [&, this](double x) {
         std::function<double(double)> func1 = this->GetFirstFunction().Density();
         std::function<double(double)> func2 = this->GetSecondFunction().Density();
-        return (1 - _p) * (func1(x)) * func2(x);
+        return (1 - _p) * (func1(x)) + _p * func2(x);
   };
 }
 
