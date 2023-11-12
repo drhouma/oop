@@ -202,3 +202,14 @@ TEST_CASE("[Variance: mu1=mu2=0, l1=1, l2=3, v1=v2=3, p=0.5]", "[smesi]"){
     double res = mix.Variance();
     CHECK(round(res*1000)/1000 == expected);
 }
+
+//Asymmetry
+
+TEST_CASE("[Asymmetry: mu1=mu2=0, l1=1, l2=3, v1=v2=3, p=0.5]", "[smesi]"){
+    CosinePower d1{4.0, 3.0, 1.5};
+    CosinePower d2{3.0, 5.0, 2.5};
+    MixtureDistribution mix{d1, d2, 0.5};
+    double expected = 0.399;
+    double res = mix.Asymmetry();
+    CHECK(round(res*1000)/1000 == expected);
+}
