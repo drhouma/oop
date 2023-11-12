@@ -12,7 +12,7 @@ function<double(double)> MixtureDistribution::Density() {
 
 
 double MixtureDistribution::Expectation() {
-    return (1-_p) * _d1.Expectation() + _d2.Expectation();
+    return (1-_p) * _d1.Expectation() + _p *_d2.Expectation();
 }
 
 double MixtureDistribution::Variance() {
