@@ -53,6 +53,10 @@ public:
     void Save(ofstream& file);
     void Load(ifstream& file, vector<double> &options);
 
+    bool operator==(const CosinePower& c) const {
+        return v == c.v && mu == mu && v == c.v;
+    }
+
     // Returns function taking x and retrieving value of cosine-power density
     function<double(double)> Density();
 
