@@ -1,24 +1,28 @@
 #pragma once
 #include "smesi.h"
 #include "standart_distribution.h"
+#include <map>
+#include <algorithm>
 
 class Empiric{
     int n; // объем выборки
     int k; // количество интервалов
     double* data; // массив данных
-    double* fr;// массив относительных частот
+    std::map<std::pair<double, double>, double> fr;
 
     public:
     // для k = 1 - формула Стерджесса k >= 1
     // n > 2
-    Empiric(int n0, CosinePower& prim, int k0); // три конструктора
-    Empiric(int n0, MixtureDistribution& mixt, int k0); // с моделированием
-    Empiric(int n0, Empiric& emp, int k0); // случайных величин
+    Empiric(int n0, CosinePower& prim, int k0=1); // три конструктора
+    Empiric(int n0, MixtureDistribution& mixt, int k0=1); // с моделированием
+    Empiric(int n0, Empiric& emp, int k0=1); // случайных величин
     // конструктор копирования и оператор присваивания
     // для глубокого копирования
     Empiric(const Empiric& emp);
     Empiric& operator=(const Empiric & emp);
 
+
+    double* GetData() {return data;}
 
     // Returns math expectation of cosine-power distribution
     double Expectation();
@@ -28,13 +32,14 @@ class Empiric{
     double Asymmetry();
     // Returns excess of cosine-power distribution
     double Excess();
-    
+
+    //Ключ - интервал, значение - относительная частота
+    std::map<std::pair<double, double>, double> GetEmpericalDensity();
 
     double emperical_moment(int p, bool central);
 
     ~Empiric(){
         delete [] data;
-        delete [] fr;
     }
 };
 

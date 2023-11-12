@@ -17,6 +17,7 @@ class MixtureDistribution {
 
     CosinePower& GetFirstFunction() {return _d1;}
     CosinePower& GetSecondFunction() {return _d2;}
+    double GetP() {return _p;}
 
     function<double(double)> Density();
 

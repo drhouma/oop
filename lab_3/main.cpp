@@ -1,5 +1,7 @@
 #define CATCH_CONFIG_RUNNER
 #include "standart_distribution.h"
+#include "empiric.h"
+#include "smesi.h"
 #include <iostream>
 #include "catch.h"
 
@@ -12,35 +14,6 @@ double get_value_of_emperical_density(std::map<std::pair<double, double>, double
     return 0.0;
 }
 
-std::map<std::pair<double, double>, double> get_emperical_density(std::vector<double>& data) {
-    if (data.size() == 0) {
-        throw std::invalid_argument("Data can't be empty");
-    }
-    int k = sturges_rule(data.size());
-    double min_elem = *(std::min_element(data.begin(), data.end())), max_elem = *(std::max_element(data.begin(), data.end()));
-    std::map<std::pair<double, double>, double> density;
-    double h = (max_elem-min_elem) / k;
-    for (int i = 1; i <= k; ++i) {
-        std::pair<double, double> key = std::make_pair(min_elem + (i - 1) * h, min_elem + i * h);
-        density[key] = 0;
-    }
-    for (auto elem : data) {
-        for (int i = 1; i <= k; ++i) {
-            double left = min_elem + (i - 1) * h, right = min_elem + i * h;
-            if ((i != k) && (left <= elem) && (elem < right)) {
-                ++density[std::make_pair(left, right)];
-                break;
-            } else if ((i == k) && (left <= elem) && (elem <= right)) {
-                ++density[std::make_pair(left, right)];
-                break;
-            }
-        }
-    }
-    for (auto& key : density) {
-        density[key.first] /= double(h * data.size());
-    }
-    return density;
-}
 
 //Graphics
 void export_main_distribution_graph_data(int n, double v) {
@@ -53,11 +26,8 @@ void export_main_distribution_graph_data(int n, double v) {
         file1 << val << ' ' <<  func(val) << std::endl;
     file1.close();
     // Генерируем случайные x
-    std::vector<double> data(n);
-
-    for (int i = 0; i < n; ++i)
-        data[i] =  obj.Generate_cosine_power_value();
-    auto emperic_dens = get_emperical_density(data);
+    Empiric emp(n, obj);
+    auto emperic_dens = emp.GetEmpericalDensity();
     // Записываем граничные значения эмпирической плотности
     std::ofstream file2("data/1_emperical_dens.txt");
     for (auto& segment : emperic_dens) {
@@ -68,8 +38,8 @@ void export_main_distribution_graph_data(int n, double v) {
     std::ofstream file3("data/1_generated_dots.txt");
     // Записываем значения сгенерированных x и соответствующие значения теор
     // плотности и эмпирической плотности в данных x
-    for (auto x : data) {
-        file3 << x << ' ' << func(x) << ' ' << get_value_of_emperical_density(emperic_dens, x) << std::endl;
+    for (int i = 0; i < n; i++) {
+        file3 << emp.GetData()[i] << ' ' << func(emp.GetData()[i]) << ' ' << get_value_of_emperical_density(emperic_dens, emp.GetData()[i]) << std::endl;
     }
     file3.close();
 }
@@ -91,11 +61,8 @@ void export_emperical_from_emperical_graph_data(int n, CosinePower obj) {
     }
     file1.close();
     // Генерируем случайные x
-    std::vector<double> data(n);
-
-    for (int i = 0; i < n; ++i)
-        data[i] = obj.Generate_cosine_power_value();
-    auto emperic_dens = get_emperical_density(data);
+    Empiric emp(n, obj);
+    auto emperic_dens = emp.GetEmpericalDensity();
     // Записываем граничные значения эмпирической плотности первой
     std::ofstream file2("data/4_emperical_dens.txt");
     for (auto& segment : emperic_dens) {
@@ -131,6 +98,7 @@ int main(int argc, char* argv[]) {
         }
 
         //Generate
+        cout << "Generate data:\n";
         cout << fromload.Generate_cosine_power_value();
 
         file_out.close();
