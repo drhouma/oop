@@ -23,6 +23,8 @@ class Empiric{
 
 
     double* GetData() {return data;}
+    std::map<std::pair<double, double>, double> GetFr() {return fr;};
+
 
     // Returns math expectation of cosine-power distribution
     double Expectation();
@@ -32,6 +34,12 @@ class Empiric{
     double Asymmetry();
     // Returns excess of cosine-power distribution
     double Excess();
+
+    function<double(double)> Density();
+
+   
+
+    double GenerateValue();
 
     //Ключ - интервал, значение - относительная частота
     std::map<std::pair<double, double>, double> GetEmpericalDensity();

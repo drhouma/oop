@@ -32,6 +32,8 @@ class MixtureDistribution {
 
     // Returns excess of cosine-power distribution
     double Excess();
+
+    double GenerateValue();
     
     ~MixtureDistribution() {}
 };

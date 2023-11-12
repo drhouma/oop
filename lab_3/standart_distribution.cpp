@@ -4,9 +4,6 @@
 int sturges_rule(int n) { return 1 + ceil(log2(n)); }
 
 // don't work on linux (function with same name exists) so add namespace
-namespace nstu {
-    double random() { return rand() / double(RAND_MAX); }
-};
 
 function<double(double)> cosine_power_density(double v) {
     return [v](double x) {
@@ -19,12 +16,15 @@ function<double(double)> cosine_power_density(double v) {
     };
 }
 
-double generate_cosine_power_value(double v) {
+double RandomCosinePowerValue(double v) {
     double r1 = nstu::random(), r2 = nstu::random();
     return 2.0 * asin(sqrt(1 - pow(r1, 2.0 / v)) * cos(2.0 * acos(-1.0) * r2)) /
            acos(-1.0);
 }
 
+double nstu::random() {
+    return rand() / double(RAND_MAX); 
+}
 
 
 function<double(double)> CosinePower::Density() {
@@ -62,8 +62,8 @@ double CosinePower::Excess() {
            pow(polygamma((v + 2) / 2.0, 1), 2);
 }
 
-double CosinePower::Generate_cosine_power_value() {
-    return mu+lambda*generate_cosine_power_value(v);
+double CosinePower::GenerateValue() {
+    return mu+lambda*RandomCosinePowerValue(v);
 }
 
 void CosinePower::Save(std::ofstream &file) {

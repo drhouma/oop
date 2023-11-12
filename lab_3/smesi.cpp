@@ -55,3 +55,13 @@ double MixtureDistribution::Excess() {
         ) - 3;
 
 }
+
+double MixtureDistribution::GenerateValue() {
+    double r = nstu::random();
+    if (r >= _p) {
+        return _d1.GenerateValue();
+    }
+    else {
+        return _d2.GenerateValue();
+    }
+}

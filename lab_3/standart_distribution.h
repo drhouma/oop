@@ -7,6 +7,9 @@
 #include<stdexcept>
 #include <string>
 
+namespace nstu {
+    double random();
+};
 struct DistributionParameters {
     double v;
     double mu;
@@ -73,6 +76,6 @@ public:
     double Excess();
 
     // Generate random value from shift-scaled cosine_power distribution
-    double Generate_cosine_power_value();
+    double GenerateValue();
 
 };

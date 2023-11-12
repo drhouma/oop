@@ -1,11 +1,21 @@
 #include "empiric.h"
 
+double Empiric::GenerateValue() {
+    double val = random(), proba = 0;
+    for (auto& segment : fr) {
+        proba += segment.second*(segment.first.second - segment.first.first);
+        if (val <= proba) {
+            double output = random() * (segment.first.second - segment.first.first) + segment.first.first;
+            return output;
+        }
+    }
+}
 
 Empiric::Empiric(int n0, CosinePower& prim, int k0) :
     n(n0>1 ? n0 : throw std::invalid_argument("numbers quantity must be > 1")), k(k0>1 ? k0 : int(log(double(n))/log(double(2.)))+1.),
     data(new double[n]) {
     if (k < 1) throw std::invalid_argument("k must be >= 1");
-    for (int i = 0; i < n; ++i) data[i] = prim.Generate_cosine_power_value();
+    for (int i = 0; i < n; ++i) data[i] = prim.GenerateValue();
     fr = this->GetEmpericalDensity();
 }
 
@@ -14,48 +24,49 @@ Empiric::Empiric(int n0, MixtureDistribution& mixt, int k0) :
     data(new double[n]) {
         if (k < 1) throw std::invalid_argument("k must be >= 1");
     for (int i = 0; i < n; ++i)
-        data[i] = mixture_generate_value(mixt.GetFirstFunction(), mixt.GetSecondFunction(), mixt.GetP());
+        data[i] = mixt.GenerateValue();
+    fr = GetEmpericalDensity();
 }
 
+/// @brief 
+/// @param n0 - кол-во чисел 
+/// @param prim - Эмпирическое распределение, основанное на стандартном. 
+/// @param k0 - кол-во интервалов
 Empiric::Empiric(int n0, Empiric& prim, int k0) :
     n(n0>1 ? n0 : throw std::invalid_argument("numbers quantity must be > 1")), k(k0>1 ? k0 : int(log(double(n))/log(double(2.)))+1.),
     data(new double[n]){
         if (k < 1) throw std::invalid_argument("k must be >= 1");
+    for (int i = 0; i < n; i++) {
+        data[i] = prim.GenerateValue();
+    }
+    fr = GetEmpericalDensity();
 }
 
-Empiric& Empiric::operator=(const Empiric& emp){
+Empiric& Empiric::operator=(const Empiric& other){
     // проверка на присваивание самому себе
-    if(this==&emp) return *this;
+    if(this==&other) return *this;
     // если размеры изменяются, то перераспределяем память
-    if(n!=emp.n){
+    if(n!=other.n){
         delete [] data;
-        n=emp.n;
+        n=other.n;
         data=new double[n];
     }
 
-    if(k!=emp.k){
-        delete [] fr;
-        k=emp.k;
-        fr=new double[k];
-    }
     for (int i = 0; i < n; i++) {
-        data[i] = emp.data[i];
+        data[i] = other.data[i];
     }
-    for (int i = 0; i < k; i++) {
-        fr[i] = emp.fr[i];
-    }
+    fr = other.fr;
+
     return *this;
 }
 
 // no need checks because emp is already checked
-Empiric::Empiric(const Empiric& emp) :
-    n(emp.n), k(emp.k), data(new double[n]), fr(new double[k]) {
+Empiric::Empiric(const Empiric& other) :
+    n(other.n), k(other.k), data(new double[n]) {
         for (int i = 0; i < n; i++) {
-            data[i] = emp.data[i];
+            data[i] = other.data[i];
         }
-        for (int i = 0; i < k; i++) {
-            fr[i] = emp.fr[i];
-        }
+        fr = other.fr;
 }
 
 
@@ -68,7 +79,17 @@ double Empiric::emperical_moment(int p, bool central) {
     return output / n;
 }
 
+function<double(double)> Empiric::Density() {
 
+    return [&, this](double x) {
+        auto func = this->GetFr();
+        for (auto& segment : func) {
+        if ((segment.first.first <= x) && (x <= segment.first.second))
+            return segment.second;
+        }
+        return 0.0;
+  };
+}
 
 double Empiric::Expectation() {
     return emperical_moment(1, false);
@@ -87,8 +108,8 @@ double Empiric::Excess() {
 }
 
 std::map<std::pair<double, double>, double> Empiric::GetEmpericalDensity() {
-    double min_elem = DBL_MAX;
-    double max_elem = DBL_MIN;
+    double min_elem = std::numeric_limits<double>::max();
+    double max_elem = std::numeric_limits<double>::min();
     for(int i=0;i<n;i++){
         if (data[i]<min_elem) min_elem = data[i];
         if (data[i] > max_elem) max_elem = data[i];
@@ -118,3 +139,4 @@ std::map<std::pair<double, double>, double> Empiric::GetEmpericalDensity() {
     }
     return density;
 }
+
