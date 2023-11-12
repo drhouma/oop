@@ -1,11 +1,11 @@
 #include "empiric.h"
 
 double Empiric::GenerateValue() {
-    double val = random(), proba = 0;
+    double val = nstu::random(), proba = 0;
     for (auto& segment : fr) {
         proba += segment.second*(segment.first.second - segment.first.first);
         if (val <= proba) {
-            double output = random() * (segment.first.second - segment.first.first) + segment.first.first;
+            double output = nstu::random() * (segment.first.second - segment.first.first) + segment.first.first;
             return output;
         }
     }
