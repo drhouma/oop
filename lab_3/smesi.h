@@ -15,12 +15,9 @@ class MixtureDistribution {
         if (p < 0 || p > 1) throw std::invalid_argument("p must be in range [0:1]");
     };
 
-
-    private:
     CosinePower& GetFirstFunction() {return _d1;}
     CosinePower& GetSecondFunction() {return _d2;}
 
-    public:
     function<double(double)> Density();
 
     // Returns math expectation of cosine-power distribution
