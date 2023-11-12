@@ -11,9 +11,9 @@ class Empiric{
     public:
     // для k = 1 - формула Стерджесса k >= 1
     // n > 2
-    Empiric(int n0, CosinePower& prim, int k0=1); // три конструктора
-    Empiric(int n0, MixtureDistribution& mixt, int k0=1); // с моделированием
-    Empiric(int n0, Empiric& emp, int k0=1); // случайных величин
+    Empiric(int n0, CosinePower& prim, int k0); // три конструктора
+    Empiric(int n0, MixtureDistribution& mixt, int k0); // с моделированием
+    Empiric(int n0, Empiric& emp, int k0); // случайных величин
     // конструктор копирования и оператор присваивания
     // для глубокого копирования
     Empiric(const Empiric& emp);

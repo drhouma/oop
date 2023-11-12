@@ -1,3 +1,4 @@
+#pragma once
 #include <fstream>
 #include <iostream>
 #include<cmath>
@@ -12,7 +13,7 @@ struct DistributionParameters {
     double lambda;
 };
 
-
+int sturges_rule(int n);
 
 using namespace std;
 
