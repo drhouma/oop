@@ -66,7 +66,7 @@ void export_emperical_from_emperical_graph_data(int n, CosinePower obj) {
     Empiric emp(n, obj, sturges_rule(n));
     auto emperic_dens = emp.GetEmpericalDensity();
     // Записываем граничные значения эмпирической плотности первой
-    std::ofstream file2("data/4_emperical_dens.txt");
+    std::ofstream file2("data/4_emperical_dens2.txt");
     for (auto& segment : emperic_dens) {
         file2 << segment.first.first << ' ' << segment.second << std::endl;
         file2 << segment.first.second << ' ' << segment.second << std::endl;
@@ -170,16 +170,27 @@ int main(int argc, char* argv[]) {
 
         //Generate
         cout << "Generate data:\n";
-        cout << fromload.GenerateValue();
+        cout << fromload.GenerateValue() << endl;
 
         file_out.close();
         file_in.close();
 
-        CosinePower unit{3};
-        export_emperical_from_emperical_graph_data(100000, unit);
-        export_main_distribution_graph_data(100000, 3);
+        //Empiric generation into files
+        CosinePower unit{4, 2, 2.2};
+        export_emperical_from_emperical_graph_data(1000, unit);
+        export_main_distribution_graph_data(250, 3);
         export_mixture_distribution_graph_data(1000, CosinePower(2, -3, 1.5), CosinePower(0.5, 2, 0.5), 0.3);
         export_shift_scaled_distribution_draph_data(250, CosinePower(2, 5, 0.3));
+
+
+        //Mixtures
+        CosinePower d1{4.0, 3.0, 1.5};
+        CosinePower d2{4.0, 5.0, 2.5};
+        MixtureDistribution mix{d1, d2, 0.5};
+        //Example
+        cout << "From mixtures Get Shift d1: " << mix.GetFirstFunction().GetShift() << endl;
+        cout << "From mixtures Get Form d2: " << mix.GetSecondFunction().GetForm() << endl;
+
 
     }
 
