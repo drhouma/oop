@@ -21,7 +21,7 @@ int sturges_rule(int n);
 
 using namespace std;
 
-class CosinePower : public DInterface {
+class CosinePower : public DInterface, PInterface {
 private:
 
     double v;//form coefficient
@@ -54,8 +54,8 @@ public:
     double GetShift() {return mu;}
     double GetScale() {return lambda;}
 
-    void Save(ofstream& file);
-    void Load(ifstream& file, vector<double> &options);
+    void Save(ofstream& file) override;
+    void Load(ifstream& file, vector<double> &options) override;
 
     bool operator==(const CosinePower& c) const {
         return v == c.v && mu == mu && v == c.v;

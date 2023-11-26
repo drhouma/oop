@@ -196,8 +196,10 @@ int main(int argc, char* argv[]) {
     DInterface *interface;
     CosinePower p(1, 1, 2), p2(2,1,2);
     interface = new CosinePower(1, 1, 2);
+    // Механизм позднего связывания
     // or 
     // interface = &p;
+
     auto func = interface->Density();
     std::cout << "Virtual: "<< func(0.5) << " Obj: " << p.Density()(0.5) << std::endl;
 
@@ -205,5 +207,9 @@ int main(int argc, char* argv[]) {
     md.Density();
     md.Asymmetry();
 
+    MixtureDistribution<CosinePower, MixtureDistribution<CosinePower, CosinePower>> md2(p, md, 0.5);
     delete interface;
+    interface = &md2;
+    auto f = interface->Density();
+    std::cout << f(0.5) << '\n';
 }

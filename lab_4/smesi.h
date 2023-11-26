@@ -4,7 +4,7 @@
 
 
 template<class Distribution1, class Distribution2>
-class MixtureDistribution  {
+class MixtureDistribution : public DInterface, PInterface {
     private:
     Distribution1 _d1;
     Distribution2 _d2;
@@ -26,7 +26,7 @@ class MixtureDistribution  {
 
 
    
-    function<double(double)> Density() {
+    function<double(double)> Density() override {
         std::function<double(double)> func1 = _d1.Density();
         std::function<double(double)> func2 = _d2.Density();
         return [this, func1, func2](double x) {
@@ -35,12 +35,12 @@ class MixtureDistribution  {
     }
 
     
-    double Expectation() {
+    double Expectation() override {
         return (1-_p) * _d1.Expectation() + _p *_d2.Expectation();
     }
 
     
-    double Variance() {
+    double Variance() override {
         double variance_1 =_d1.Variance();
         double variance_2 = _d2.Variance();
         double me_1 = _d1.Expectation();
@@ -52,7 +52,7 @@ class MixtureDistribution  {
     }
 
     
-    double Asymmetry() {
+    double Asymmetry() override {
         double variance_1 =_d1.Variance();
         double variance_2 = _d2.Variance();
         double me_1 = _d1.Expectation();
@@ -65,7 +65,7 @@ class MixtureDistribution  {
 
     
     
-    double Excess() {
+    double Excess() override {
          double variance_1 =_d1.Variance();
         double variance_2 = _d2.Variance();
         double me_1 = _d1.Expectation();
@@ -84,7 +84,7 @@ class MixtureDistribution  {
 
     }
     
-    double GenerateValue() {
+    double GenerateValue() override {
         double r = nstu::random();
         if (r >= _p) {
             return _d1.GenerateValue();
@@ -95,5 +95,13 @@ class MixtureDistribution  {
     }
 
     ~MixtureDistribution() {}
+
+    // Написать функции ниже
+    void Save(ofstream& file) override {
+
+    }
+    void Load(ifstream& file, vector<double> &options) override {
+
+    }
 };
 

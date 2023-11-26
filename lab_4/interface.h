@@ -33,6 +33,15 @@ public:
 
     virtual double GenerateValue() = 0;
 
+};
+
+class PInterface {
+    public:
+    PInterface(/* args */) {}
+    ~PInterface() {}
+
+    virtual void Save(std::ofstream& file) = 0;
+    virtual void Load(std::ifstream& file, std::vector<double> &options) = 0;
 
 };
 
