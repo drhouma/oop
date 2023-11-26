@@ -4,7 +4,7 @@
 
 
 template<class Distribution1, class Distribution2>
-class MixtureDistribution : public DInterface, PInterface {
+class MixtureDistribution : public DInterface, public PInterface {
     private:
     Distribution1 _d1;
     Distribution2 _d2;
@@ -96,12 +96,32 @@ class MixtureDistribution : public DInterface, PInterface {
 
     ~MixtureDistribution() {}
 
-    // Написать функции ниже
     void Save(ofstream& file) override {
+        if(!file.is_open()){
+            throw invalid_argument("File didn't open.");
+        }
+        file << this->Density()(0) << endl;
+        file << this->Expectation() << endl;
+        file << this->Variance() << endl;
+        file << this->Asymmetry() << endl;
+        file << this->Excess() << endl;
 
+        cout << "Data for mixture distribution was saved." << endl;
     }
     void Load(ifstream& file, vector<double> &options) override {
+        if (options.size() < 5){
+            throw invalid_argument("Vector for options must have a minimum size of 5 (Density, Expectation, Variance, Asymmetry, Excess).");
+        }
+        if(!file.is_open()){
+            throw invalid_argument("File didn't open.");
+        }
 
+        file >> options[0];
+        file >> options[1];
+        file >> options[2];
+        file >> options[3];
+        file >> options[4];
+        cout << "Data for mixture distribution was loaded." << endl;
     }
 };
 
