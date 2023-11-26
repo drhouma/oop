@@ -78,7 +78,7 @@ void CosinePower::Save(std::ofstream &file) {
     file << this->Asymmetry() << endl;
     file << this->Excess() << endl;
 
-    cout << "Data was saved." << endl;
+    cout << "Data for standart distribution was saved." << endl;
 }
 
 void CosinePower::Load(std::ifstream &file, vector<double> &options) {
@@ -99,7 +99,7 @@ void CosinePower::Load(std::ifstream &file, vector<double> &options) {
     file >> options[2];
     file >> options[3];
     file >> options[4];
-    cout << "Data was loaded." << endl;
+    cout << "Data for standart distribution was loaded." << endl;
 
 }
 

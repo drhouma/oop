@@ -21,7 +21,7 @@ int sturges_rule(int n);
 
 using namespace std;
 
-class CosinePower : public DInterface, PInterface {
+class CosinePower : public DInterface, public PInterface {
 private:
 
     double v;//form coefficient
