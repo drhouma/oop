@@ -1,5 +1,6 @@
 #include "standart_distribution.h"
 #include "smesi.h"
+#include "empiric.h"
 #include "catch.h"
 #include "interface.h"
 
@@ -135,7 +136,7 @@ TEST_CASE("[Variance: mu1=mu2=0, l1=1, l2=3, v1=v2=3, p=0.5]", "[smesi]"){
 
 //Asymmetry
 
-TEST_CASE("[Asymmetry: mu1=mu2=0, l1=1, l2=3, v1=v2=3, p=0.5]", "[smesi]"){
+TEST_CASE("[Asymmetry: mu1=3, mu2=5, l1=1.5, l2=2.5, v1=4, v2=3, p=0.5]", "[smesi]"){
     CosinePower d1{4.0, 3.0, 1.5};
     CosinePower d2{3.0, 5.0, 2.5};
     MixtureDistribution<CosinePower, CosinePower> mix{d1, d2, 0.5};
@@ -144,4 +145,33 @@ TEST_CASE("[Asymmetry: mu1=mu2=0, l1=1, l2=3, v1=v2=3, p=0.5]", "[smesi]"){
     CHECK(round(res*1000)/1000 == expected);
 }
 
-//Empiric tests in main.cpp in "export" functions
+//Empiric
+TEST_CASE("[Empiric Expectation for cosine power; n = 100, v =4, mu=3, l=1.5]", "[smesi]"){
+    CosinePower cs{4.0, 3.0, 1.5};
+
+    Empiric emp(100, cs);
+    double expected = 2.953;
+    auto res = emp.Expectation();
+    CHECK(round(res*1000)/1000 == expected);
+}
+
+TEST_CASE("[Empiric Asymmetry for mixture distribution (using CosinePower); n = 100,  mu1=3, mu2=5, l1=1.5, l2=2.5, v1=4, v2=3, p=0.5]", "[smesi]"){
+    CosinePower d1{4.0, 3.0, 1.5};
+    CosinePower d2{3.0, 5.0, 2.5};
+    MixtureDistribution<CosinePower, CosinePower> mix{d1, d2, 0.5};
+    Empiric emp(100, mix);
+    double expected = 0.532;
+    auto res = emp.Asymmetry();
+    CHECK(round(res*1000)/1000 == expected);
+}
+
+TEST_CASE("[Empiric Excess for empiric distribution for Mixtures (using CosinePower); n = 100,  mu1=3, mu2=5, l1=1.5, l2=2.5, v1=4, v2=3, p=0.5]", "[smesi]"){
+    CosinePower d1{4.0, 3.0, 1.5};
+    CosinePower d2{3.0, 5.0, 2.5};
+    MixtureDistribution<CosinePower, CosinePower> mix{d1, d2, 0.5};
+    Empiric emp(100, mix);
+    Empiric emp2(100, emp);
+    double expected = -0.829;
+    auto res = emp.Excess();
+    CHECK(round(res*1000)/1000 == expected);
+}

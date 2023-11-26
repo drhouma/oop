@@ -19,16 +19,15 @@
  //Graphics
  void export_main_distribution_graph_data(int n, double v) {
      // Записываем теоретическую плотность
-     DInterface *interface;
-     interface = new CosinePower{v};
-     auto func = interface->Density();
+     CosinePower obj{v};
+     auto func = obj.Density();
      std::ofstream file1("data/1_theor_dens.txt");
      file1 << v << std::endl;
      for (double val = -0.99; abs(val - 1) > 0.001 && val < 1; val += 0.01)
          file1 << val << ' ' <<  func(val) << std::endl;
      file1.close();
      // Генерируем случайные x
-     Empiric emp(n, *interface);
+     Empiric emp(n, obj);
      auto emperic_dens = emp.GetEmpericalDensity();
      // Записываем граничные значения эмпирической плотности
      std::ofstream file2("data/1_emperical_dens.txt");
