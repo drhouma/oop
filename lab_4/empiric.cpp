@@ -1,45 +1,28 @@
 #include "empiric.h"
 
+
 double Empiric::GenerateValue() {
-    double val = random(), proba = 0;
+    double val = nstu::random(), proba = 0;
     for (auto& segment : fr) {
         proba += segment.second*(segment.first.second - segment.first.first);
         if (val <= proba) {
-            double output = random() * (segment.first.second - segment.first.first) + segment.first.first;
+            double output = nstu::random() * (segment.first.second - segment.first.first) + segment.first.first;
             return output;
         }
     }
 }
 
-Empiric::Empiric(int n0, CosinePower& prim, int k0) :
-    n(n0>1 ? n0 : throw std::invalid_argument("numbers quantity must be > 1")), k(k0>1 ? k0 : int(log(double(n))/log(double(2.)))+1.),
-    data(new double[n]) {
-    if (k < 1) throw std::invalid_argument("k must be >= 1");
-    for (int i = 0; i < n; ++i) data[i] = prim.GenerateValue();
-    fr = this->GetEmpericalDensity();
-}
 
-Empiric::Empiric(int n0, MixtureDistribution& mixt, int k0) :
-    n(n0>1 ? n0 : throw std::invalid_argument("numbers quantity must be > 1")), k(k0>1 ? k0 : int(log(double(n))/log(double(2.)))+1.),
-    data(new double[n]) {
-        if (k < 1) throw std::invalid_argument("k must be >= 1");
-    for (int i = 0; i < n; ++i)
-        data[i] = mixt.GenerateValue();
-    fr = GetEmpericalDensity();
-}
-
-/// @brief 
-/// @param n0 - кол-во чисел 
-/// @param prim - Эмпирическое распределение, основанное на стандартном. 
+/// @brief
+/// @param n0 - кол-во чисел
+/// @param d - объект класса, реализующего интерфейс распределения
 /// @param k0 - кол-во интервалов
-Empiric::Empiric(int n0, Empiric& prim, int k0) :
-    n(n0>1 ? n0 : throw std::invalid_argument("numbers quantity must be > 1")), k(k0>1 ? k0 : int(log(double(n))/log(double(2.)))+1.),
-    data(new double[n]){
-        if (k < 1) throw std::invalid_argument("k must be >= 1");
-    for (int i = 0; i < n; i++) {
-        data[i] = prim.GenerateValue();
-    }
-    fr = GetEmpericalDensity();
+Empiric::Empiric(int n0, DInterface& d, int k0) :
+        n(n0>1 ? n0 : throw std::invalid_argument("numbers quantity must be > 1")), k(k0>1 ? k0 : int(log(double(n))/log(double(2.)))+1.),
+        data(new double[n]) {
+    if (k < 1) throw std::invalid_argument("k must be >= 1");
+    for (int i = 0; i < n; ++i) data[i] = d.GenerateValue();
+    fr = this->GetEmpericalDensity();
 }
 
 Empiric& Empiric::operator=(const Empiric& other){
@@ -114,7 +97,7 @@ std::map<std::pair<double, double>, double> Empiric::GetEmpericalDensity() {
         if (data[i]<min_elem) min_elem = data[i];
         if (data[i] > max_elem) max_elem = data[i];
     }
-   
+
 
     std::map<std::pair<double, double>, double> density;
     double h = (max_elem-min_elem) / k;
@@ -140,3 +123,32 @@ std::map<std::pair<double, double>, double> Empiric::GetEmpericalDensity() {
     return density;
 }
 
+void Empiric::Save(ofstream& file) {
+    if (!file.is_open()) {
+        throw invalid_argument("File didn't open.");
+    }
+    file << this->Density()(0) << endl;
+    file << this->Expectation() << endl;
+    file << this->Variance() << endl;
+    file << this->Asymmetry() << endl;
+    file << this->Excess() << endl;
+
+    cout << "Data for empiric distribution was saved." << endl;
+}
+
+void Empiric::Load(std::ifstream &file, vector<double> &options) {
+    if (options.size() < 5){
+        throw invalid_argument("Vector for options must have a minimum size of 5 (Density, Expectation, Variance, Asymmetry, Excess).");
+    }
+    if(!file.is_open()){
+        throw invalid_argument("File didn't open.");
+    }
+
+    file >> options[0];
+    file >> options[1];
+    file >> options[2];
+    file >> options[3];
+    file >> options[4];
+    cout << "Data for empiric distribution was loaded." << endl;
+
+}
