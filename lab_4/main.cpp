@@ -189,10 +189,17 @@ int main(int argc, char* argv[]) {
         //Distribuion object
          DInterface *di;
          CosinePower p(1, 1, 2), p2(2,1,2);
-         di = new CosinePower(1, 1, 2);
+
          // Механизм позднего связывания
-         // or
-         // interface = &p;
+         di = new CosinePower(1, 1, 2);
+         std::cout << "Late binding:\n";
+         std::cout << "Density for standart distribution x=0, v=1, mu=1, l=2: " << di->Density()(0) << std::endl;
+         delete di;
+         di = new MixtureDistribution<CosinePower, CosinePower> {p, p2, 0.5};
+         std::cout << "Density for mixture of standart distributions x=0, v1=1, mu1=mu2=1, l1=l2=2, v2=2, p=0.5: " << di->Density()(0) << std::endl;
+         delete di;
+         di = new Empiric(100, p);
+         std::cout << "Density for empiric distribution using standart x=0, v=1, mu=1, l=2: " << di->Density()(0) << std::endl;
 
          auto func = di->Density();
         cout << "Virtual: "<< func(0.5) << " Obj: " << p.Density()(0.5) << endl;
@@ -202,7 +209,7 @@ int main(int argc, char* argv[]) {
          md.Asymmetry();
 
          MixtureDistribution<CosinePower, MixtureDistribution<CosinePower, CosinePower>> md2(p, md, 0.5);
-         auto f = di->Density();
+         auto f = md2.Density();
          cout << f(0.5) << endl;
 
          int result = Catch::Session().run(argc, argv);

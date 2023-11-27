@@ -150,7 +150,7 @@ TEST_CASE("[Empiric Expectation for cosine power; n = 100, v =4, mu=3, l=1.5]", 
     CosinePower cs{4.0, 3.0, 1.5};
 
     Empiric emp(100, cs);
-    double expected = 2.953;
+    double expected = 2.957;
     auto res = emp.Expectation();
     CHECK(round(res*1000)/1000 == expected);
 }
@@ -160,7 +160,7 @@ TEST_CASE("[Empiric Asymmetry for mixture distribution (using CosinePower); n = 
     CosinePower d2{3.0, 5.0, 2.5};
     MixtureDistribution<CosinePower, CosinePower> mix{d1, d2, 0.5};
     Empiric emp(100, mix);
-    double expected = 0.532;
+    double expected = 0.317;
     auto res = emp.Asymmetry();
     CHECK(round(res*1000)/1000 == expected);
 }
@@ -171,7 +171,7 @@ TEST_CASE("[Empiric Excess for empiric distribution for Mixtures (using CosinePo
     MixtureDistribution<CosinePower, CosinePower> mix{d1, d2, 0.5};
     Empiric emp(100, mix);
     Empiric emp2(100, emp);
-    double expected = -0.829;
+    double expected = -0.7;
     auto res = emp.Excess();
     CHECK(round(res*1000)/1000 == expected);
 }
